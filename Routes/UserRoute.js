@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { Router } = require("express");
 const user = require("../Modal/UserModal");
 
 //Endpoint to get a user by Id
@@ -27,6 +28,28 @@ router.route("/").get((req, res) => {
     })
     .catch((Error) => {
       res.send(Error);
+    });
+});
+
+//Endpoint to Add a new user
+router.route("/adduser").post((req, res) => {
+  //Create a new user model to save it in database
+  const newuser = new user({
+    name: req.body.name,
+    age: req.body.age,
+    email: req.body.email,
+    password: req.body.password,
+    phone: req.body.phone,
+  });
+
+  //Passing the new object from user to mongoose to create a new entry
+  newuser
+    .save()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.send(err);
     });
 });
 
