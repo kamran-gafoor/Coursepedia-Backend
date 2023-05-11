@@ -18,4 +18,16 @@ router.route("/:id").get((req, res) => {
     });
 });
 
+//Endpoint to get all users
+router.route("/").get((req, res) => {
+  user
+    .find()
+    .then((resData) => {
+      res.send(resData);
+    })
+    .catch((Error) => {
+      res.send(Error);
+    });
+});
+
 module.exports = router;
