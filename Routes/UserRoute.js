@@ -53,4 +53,20 @@ router.route("/adduser").post((req, res) => {
     });
 });
 
+//Endpoint to update a new user
+
+router.route("/update/:id").put((req, res) => {
+  user
+    .findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json("User updated with ID:" + user);
+      }
+      res.send(user);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
+
 module.exports = router;
