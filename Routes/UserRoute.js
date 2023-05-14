@@ -69,8 +69,9 @@ router.route("/update/:id").put((req, res) => {
   //validate the object recevied during post request
 
   const validation = schema.validate(req.body);
-  console.log(validation.error);
   if (validation.error) {
+    res.send(validation.error.message);
+  } else {
     user
       .findByIdAndUpdate(req.params.id, req.body, { new: true })
       .then((user) => {
@@ -82,8 +83,6 @@ router.route("/update/:id").put((req, res) => {
       .catch((error) => {
         res.status(500).send(error);
       });
-  } else {
-    res.send("Invalid data");
   }
 });
 
