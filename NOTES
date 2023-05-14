@@ -1,0 +1,13 @@
+// router.route("/update/:id").put((req, res) => {
+//   user
+//     .findByIdAndUpdate(req.params.id, req.body, { new: true })
+//     .then((user) => {
+//       if (!user) {
+//         return res.status(404).json("User updated with ID:" + user); //user with id could not be updated
+//       }
+//       res.send(user); // else{res.send(user)}
+//     })
+//     .catch((error) => {
+//       res.status(500).send(error);
+//     });
+// });
