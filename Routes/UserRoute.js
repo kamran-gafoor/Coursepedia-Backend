@@ -61,7 +61,7 @@ router.route("/delete/:id").delete((req, res) => {
       if (!user) {
         return res.status(404).json("User not Find with ID:" + user);
       }
-      res.send(user);
+      res.json("User deleted successfully with id:" + req.params.id);
     })
     .catch((error) => {
       res.status(500).send(error);
