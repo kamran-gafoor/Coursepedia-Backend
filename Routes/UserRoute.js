@@ -86,4 +86,36 @@ router.route("/delete/:id").delete((req, res) => {
     });
 });
 
+//Endpoint to update a new user
+
+router.route("/update/:id").put((req, res) => {
+  //Joi schema created for incoming post object
+  const schema = Joi.object({
+    name: Joi.string().min(2).required(),
+    email: Joi.string().min(2).required(),
+    password: Joi.string().alphanum().required(),
+    phone: Joi.number().integer(),
+    age: Joi.number().integer().max(100),
+  });
+
+  //validate the object recevied during post request
+
+  const validation = schema.validate(req.body);
+  if (validation.error) {
+    res.send(validation.error.message);
+  } else {
+    user
+      .findByIdAndUpdate(req.params.id, req.body, { new: true })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json("User updated with ID:" + user);
+        }
+        res.send(user);
+      })
+      .catch((error) => {
+        res.status(500).send(error);
+      });
+  }
+});
+
 module.exports = router;
