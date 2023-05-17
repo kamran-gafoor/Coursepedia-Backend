@@ -29,6 +29,11 @@ const userRouter = require("./Routes/UserRoute");
 //To Route any incoming user request
 app.use("/user", userRouter);
 
+const courseRouter = require("./Routes/CourseRoute");
+
+//To Route any incoming course request
+app.use("/course", courseRouter);
+
 //Allowing the server to listen to a specific port, Default 3000 if not provided
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
