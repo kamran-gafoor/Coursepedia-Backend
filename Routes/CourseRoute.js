@@ -20,10 +20,10 @@ router.route("/addcourse").post((req, res) => {
   //Joi schema created for incoming post object
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
-    description: Joi.string().min(2).required(),
-    video: Joi.string().min(2).required(),
-    link: Joi.string().min(2).required(),
-    difficulty: Joi.number().max(10),
+    description: Joi.string(),
+    video: Joi.string(),
+    link: Joi.string(),
+    difficulty: Joi.string(),
     type: Joi.string().min(2).required(),
     category: Joi.string().min(2).required(),
   });
