@@ -3,7 +3,7 @@ const { Router } = require("express");
 const course = require("../Modal/CourseModal");
 const Joi = require("joi");
 
-//Endpoint to get all users
+//Endpoint to get all course
 router.route("/").get((req, res) => {
   course
     .find()
@@ -15,7 +15,7 @@ router.route("/").get((req, res) => {
     });
 });
 
-//Endpoint to Add a new user
+//Endpoint to Add a new course
 router.route("/addcourse").post((req, res) => {
   //Joi schema created for incoming post object
   const schema = Joi.object({
@@ -23,7 +23,7 @@ router.route("/addcourse").post((req, res) => {
     description: Joi.string(),
     video: Joi.string(),
     link: Joi.string(),
-    difficulty: Joi.string(),
+    difficulty: Joi.number(),
     type: Joi.string().min(2).required(),
     category: Joi.string().min(2).required(),
   });
@@ -56,6 +56,23 @@ router.route("/addcourse").post((req, res) => {
         res.send(err);
       });
   }
+});
+
+//Endpoint to get a course by name
+router.route("/:id").get((req, res) => {
+  course
+    .findById(req.params.id)
+    .then((resData) => {
+      //If there is no course found
+      if (resData) {
+        res.json(resData);
+      } else {
+        res.json("Course not Found with :" + req.params.id);
+      }
+    })
+    .catch((Error) => {
+      res.send(Error);
+    });
 });
 
 module.exports = router;
