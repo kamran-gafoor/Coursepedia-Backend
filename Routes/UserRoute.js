@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { Router } = require("express");
 const user = require("../Modal/UserModal");
 const Joi = require("joi");
+const User = require("../Modal/UserModal");
 
 //Endpoint to get a user by Id
 router.route("/:id").get((req, res) => {
@@ -116,6 +117,31 @@ router.route("/update/:id").put((req, res) => {
         res.status(500).send(error);
       });
   }
+});
+
+router.route("/validuser/:email/:password").post((req, res) => {
+  const validCredential = {
+    email: req.params.email,
+    password: req.params.password,
+  };
+
+  User.findOne(validCredential)
+    .then((data) => {
+      if (!data) {
+        res.status(404).json({
+          message: "login not successful",
+          error: "User not found",
+        });
+      } else {
+        res.status(200).json({
+          message: "Login successful",
+          user,
+        });
+      }
+    })
+    .catch((error) => {
+      res.status(400).json(error);
+    });
 });
 
 module.exports = router;
