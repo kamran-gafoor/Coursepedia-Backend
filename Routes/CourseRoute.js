@@ -58,4 +58,19 @@ router.route("/addcourse").post((req, res) => {
   }
 });
 
+//Endpoint to delete a new course
+router.route("/delete/:id").delete((req, res) => {
+  course
+    .findByIdAndDelete(req.params.id)
+    .then((course) => {
+      if (!course) {
+        return res.status(404).json("User not Find with ID:" + course);
+      }
+      res.json("Course deleted successfully with id:" + req.params.id);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
+
 module.exports = router;
