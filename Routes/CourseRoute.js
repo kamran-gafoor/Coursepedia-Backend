@@ -58,6 +58,37 @@ router.route("/addcourse").post((req, res) => {
   }
 });
 
+router.route("/update/:id").put((req, res) => {
+  //Joi schema created for incoming post object
+  const schema = Joi.object({
+    name: Joi.string().min(2).required(),
+    description: Joi.string(),
+    video: Joi.string(),
+    link: Joi.string(),
+    difficulty: Joi.number(),
+    type: Joi.string().min(2).required(),
+    category: Joi.string().min(2).required(),
+  });
+  //validate the object recevied during post request
+
+  const validation = schema.validate(req.body);
+  if (validation.error) {
+    res.send(validation.error.message);
+  } else {
+    course
+      .findByIdAndUpdate(req.params.id, req.body, { new: true })
+      .then((course) => {
+        if (!course) {
+          return res.status(404).json("course updated with ID:" + course);
+        }
+        res.send(course);
+      })
+      .catch((error) => {
+        res.status(500).send(error);
+      });
+  }
+});
+
 //Endpoint to get a course by name
 router.route("/:id").get((req, res) => {
   course
