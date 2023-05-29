@@ -21,7 +21,6 @@ router.route("/:id").get((req, res) => {
 });
 
 //Endpoint to get all course
-
 router.route("/").get((req, res) => {
   course
     .find()
