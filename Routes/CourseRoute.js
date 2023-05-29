@@ -3,23 +3,6 @@ const { Router } = require("express");
 const course = require("../Modal/CourseModal");
 const Joi = require("joi");
 
-//Endpoint to get a course by name
-router.route("/:id").get((req, res) => {
-  course
-    .findById(req.params.id)
-    .then((resData) => {
-      //If there is no course found
-      if (resData) {
-        res.json(resData);
-      } else {
-        res.json("Course not Found with :" + req.params.id);
-      }
-    })
-    .catch((Error) => {
-      res.send(Error);
-    });
-});
-
 //Endpoint to get all course
 router.route("/").get((req, res) => {
   course
