@@ -73,4 +73,21 @@ router.route("/delete/:id").delete((req, res) => {
     });
 });
 
+//Endpoint to get a course by name
+router.route("/:id").get((req, res) => {
+  course
+    .findById(req.params.id)
+    .then((resData) => {
+      //If there is no course found
+      if (resData) {
+        res.json(resData);
+      } else {
+        res.json("Course not Found with :" + req.params.id);
+      }
+    })
+    .catch((Error) => {
+      res.send(Error);
+    });
+});
+
 module.exports = router;
