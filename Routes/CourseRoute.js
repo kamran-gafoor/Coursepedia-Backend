@@ -3,6 +3,23 @@ const { Router } = require("express");
 const course = require("../Modal/CourseModal");
 const Joi = require("joi");
 
+//Endpoint to get a course by name
+router.route("/:id").get((req, res) => {
+  course
+    .findById(req.params.id)
+    .then((resData) => {
+      //If there is no course found
+      if (resData) {
+        res.json(resData);
+      } else {
+        res.json("Course not Found with :" + req.params.id);
+      }
+    })
+    .catch((Error) => {
+      res.send(Error);
+    });
+});
+
 //Endpoint to get all course
 router.route("/").get((req, res) => {
   course
@@ -56,6 +73,21 @@ router.route("/addcourse").post((req, res) => {
         res.send(err);
       });
   }
+});
+
+//Endpoint to delete a new course
+router.route("/delete/:id").delete((req, res) => {
+  course
+    .findByIdAndDelete(req.params.id)
+    .then((course) => {
+      if (!course) {
+        return res.status(404).json("User not Find with ID:" + course);
+      }
+      res.json("Course deleted successfully with id:" + req.params.id);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
 });
 
 router.route("/update/:id").put((req, res) => {
