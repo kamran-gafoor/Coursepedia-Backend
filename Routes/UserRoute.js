@@ -133,9 +133,17 @@ router.route("/validuser/:email/:password").post((req, res) => {
           error: "User not found",
         });
       } else {
+        //Assigning jwt token
+        const accessToken = jwt.sign(
+          { email: req.body.email },
+          process.env.auth_key_secret,
+          { expiresIn: "30m" }
+        );
+
+        //Sending response
         res.status(200).json({
           message: "Login successful",
-          user,
+          accessToken: accessToken,
         });
       }
     })
