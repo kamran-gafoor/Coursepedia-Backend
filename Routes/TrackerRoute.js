@@ -2,9 +2,11 @@ const router = require("express").Router();
 const { Router } = require("express");
 const tracker = require("../Modal/CourseTrackerModal");
 const Joi = require("joi");
+const jwtAuth = require("../Middleware/Jwt");
+const jwt = require("jsonwebtoken");
 
 //Endpoint to get all users
-router.route("/").get((req, res) => {
+router.route("/").get(jwtAuth, (req, res) => {
   tracker
     .find()
     .then((resData) => {
@@ -31,13 +33,13 @@ router.route("/addtracker").post((req, res) => {
     res.send(validation.error.message);
   } else {
     //Create a new user model to save it in database
-    const newuser = new tracker({
+    const newtracker = new tracker({
       user_id: req.body.user_id,
       course_id: req.body.course_id,
     });
 
     //Passing the new object from user to mongoose to create a new entry
-    newuser
+    newtracker
       .save()
       .then((data) => {
         res.json(data);
@@ -49,7 +51,7 @@ router.route("/addtracker").post((req, res) => {
 });
 
 //Endpoint to delete a new user
-router.route("/delete/:id").delete((req, res) => {
+router.route("/delete/:id").delete(jwtAuth, (req, res) => {
   tracker
     .findByIdAndDelete(req.params.id)
     .then((tracker) => {

@@ -2,9 +2,11 @@ const router = require("express").Router();
 const { Router } = require("express");
 const course = require("../Modal/CourseModal");
 const Joi = require("joi");
+const jwtAuth = require("../Middleware/Jwt");
+const jwt = require("jsonwebtoken");
 
 //Endpoint to get all course
-router.route("/").get((req, res) => {
+router.route("/").get(jwtAuth, (req, res) => {
   course
     .find()
     .then((resData) => {
@@ -59,7 +61,7 @@ router.route("/addcourse").post((req, res) => {
 });
 
 //Endpoint to delete a new course
-router.route("/delete/:id").delete((req, res) => {
+router.route("/delete/:id").delete(jwtAuth, (req, res) => {
   course
     .findByIdAndDelete(req.params.id)
     .then((course) => {
@@ -73,7 +75,7 @@ router.route("/delete/:id").delete((req, res) => {
     });
 });
 
-router.route("/update/:id").put((req, res) => {
+router.route("/update/:id").put(jwtAuth, (req, res) => {
   //Joi schema created for incoming post object
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
@@ -105,7 +107,7 @@ router.route("/update/:id").put((req, res) => {
 });
 
 //Endpoint to get a course by name
-router.route("/:id").get((req, res) => {
+router.route("/:id").get(jwtAuth, (req, res) => {
   course
     .findById(req.params.id)
     .then((resData) => {
