@@ -3,9 +3,11 @@ const { Router } = require("express");
 const user = require("../Modal/UserModal");
 const Joi = require("joi");
 const User = require("../Modal/UserModal");
+const jwtAuth = require("../Middleware/Jwt");
+const jwt = require("jsonwebtoken");
 
 //Endpoint to get a user by Id
-router.route("/:id").get((req, res) => {
+router.route("/:id").get(jwtAuth, (req, res) => {
   user
     .findById(req.params.id)
     .then((resData) => {
@@ -22,7 +24,7 @@ router.route("/:id").get((req, res) => {
 });
 
 //Endpoint to get all users
-router.route("/").get((req, res) => {
+router.route("/").get(jwtAuth, (req, res) => {
   user
     .find()
     .then((resData) => {
@@ -73,7 +75,7 @@ router.route("/adduser").post((req, res) => {
 });
 
 //Endpoint to delete a new user
-router.route("/delete/:id").delete((req, res) => {
+router.route("/delete/:id").delete(jwtAuth, (req, res) => {
   user
     .findByIdAndDelete(req.params.id)
     .then((user) => {
@@ -89,7 +91,7 @@ router.route("/delete/:id").delete((req, res) => {
 
 //Endpoint to update a new user
 
-router.route("/update/:id").put((req, res) => {
+router.route("/update/:id").put(jwtAuth, (req, res) => {
   //Joi schema created for incoming post object
   const schema = Joi.object({
     name: Joi.string().min(2).required(),
@@ -119,10 +121,10 @@ router.route("/update/:id").put((req, res) => {
   }
 });
 
-router.route("/validuser/:email/:password").post((req, res) => {
+router.route("/validuser").post((req, res) => {
   const validCredential = {
-    email: req.params.email,
-    password: req.params.password,
+    email: req.body.email,
+    password: req.body.password,
   };
 
   User.findOne(validCredential)
